@@ -1,0 +1,2829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BookVerse - Premium Literary Experience</title>
+
+    <!-- React -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --accent: #f97316;
+            --success: #22c55e;
+
+            --bg-primary: #f3f4f6;
+            --bg-secondary: #ffffff;
+            --bg-elevated: #ffffff;
+
+            --text-primary: #020617;
+            --text-secondary: #6b7280;
+
+            --border: #e5e7eb;
+
+            --shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+            --radius: 16px;
+            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        [data-theme="dark"] {
+            --primary: #60a5fa;
+            --primary-dark: #3b82f6;
+            --accent: #fb923c;
+            --success: #4ade80;
+
+            --bg-primary: #020617;
+            --bg-secondary: #020617;
+            --bg-elevated: #020617;
+
+            --text-primary: #e5e7eb;
+            --text-secondary: #9ca3af;
+
+            --border: #111827;
+
+            --shadow: 0 18px 40px rgba(0, 0, 0, 0.6);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: "Inter", sans-serif;
+            background:
+                radial-gradient(circle at top left, rgba(37, 99, 235, 0.12), transparent 55%),
+                radial-gradient(circle at top right, rgba(248, 113, 113, 0.14), transparent 60%),
+                var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Auth */
+        .auth-wrapper {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1rem;
+        }
+
+        .auth-card {
+            background: linear-gradient(135deg, rgba(15,23,42,0.96), rgba(15,23,42,0.98));
+            border-radius: 24px;
+            box-shadow: 0 30px 80px rgba(15,23,42,0.85);
+            max-width: 980px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1.1fr 1fr;
+            overflow: hidden;
+            color: #e5e7eb;
+        }
+
+        .auth-visual {
+            position: relative;
+            padding: 2.5rem;
+            background:
+              radial-gradient(circle at top left, rgba(59,130,246,0.35), transparent 60%),
+              radial-gradient(circle at bottom right, rgba(249,115,22,0.25), transparent 55%);
+        }
+
+        .auth-logo {
+            font-size: 1.6rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .auth-logo span {
+            display: inline-block;
+            padding: 4px 9px;
+            border-radius: 999px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            border: 1px solid rgba(148,163,184,0.5);
+        }
+
+        .auth-title {
+            font-size: 2.3rem;
+            margin-top: 2rem;
+            margin-bottom: 0.75rem;
+            font-weight: 700;
+        }
+
+        .auth-subtitle {
+            color: #9ca3af;
+            font-size: 0.98rem;
+        }
+
+        .auth-metrics {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 2.5rem;
+        }
+
+        .auth-metric {
+            padding: 0.7rem 1rem;
+            border-radius: 999px;
+            border: 1px solid rgba(148,163,184,0.4);
+            background: rgba(15,23,42,0.6);
+            font-size: 0.8rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .auth-metric strong {
+            font-size: 1rem;
+        }
+
+        .auth-review {
+            margin-top: 2.5rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(148,163,184,0.35);
+            display: flex;
+            align-items: center;
+            gap: 0.9rem;
+            font-size: 0.9rem;
+            color: #9ca3af;
+        }
+
+        .auth-avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 999px;
+            background: linear-gradient(135deg, #34d399, #22c55e);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: #022c22;
+        }
+
+        .auth-form {
+            background: var(--bg-secondary);
+            position: relative;
+            padding: 2.5rem 2.25rem;
+        }
+
+        .auth-form-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+
+        .auth-badge {
+            font-size: 0.7rem;
+            padding: 4px 8px;
+            border-radius: 999px;
+            background: rgba(37,99,235,0.08);
+            color: var(--primary);
+            border: 1px solid rgba(37,99,235,0.35);
+        }
+
+        .auth-toggle {
+            margin-top: 0.5rem;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .auth-toggle button {
+            background: none;
+            border: none;
+            color: var(--primary);
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .auth-field {
+            margin-bottom: 1rem;
+        }
+
+        .auth-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            margin-bottom: 4px;
+            color: var(--text-secondary);
+        }
+
+        .auth-input {
+            width: 100%;
+            padding: 0.7rem 0.9rem;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: rgba(15,23,42,0.02);
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .auth-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 1px rgba(37,99,235,0.5);
+        }
+
+        .auth-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.83rem;
+            color: var(--text-secondary);
+        }
+
+        .auth-submit {
+            margin-top: 1.25rem;
+            width: 100%;
+            padding: 0.85rem 1rem;
+            border-radius: 999px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: #f9fafb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+            box-shadow: 0 14px 30px rgba(37,99,235,0.55);
+            transition: var(--transition);
+        }
+
+        .auth-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 18px 40px rgba(37,99,235,0.7);
+        }
+
+        .auth-separator {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin: 1.25rem 0;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .auth-separator span {
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+
+        .auth-socials {
+            display: flex;
+            gap: 0.7rem;
+        }
+
+        .auth-social-btn {
+            flex: 1;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            background: rgba(15,23,42,0.01);
+            padding: 0.65rem 0.8rem;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+
+        .auth-helper {
+            margin-top: 1rem;
+            font-size: 0.78rem;
+            color: var(--text-secondary);
+        }
+
+        /* Header */
+        .header {
+            backdrop-filter: blur(18px);
+            background: color-mix(in srgb, var(--bg-secondary) 88%, transparent);
+            border-bottom: 1px solid rgba(148,163,184,0.35);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.9rem 0;
+            gap: 1rem;
+        }
+
+        .logo-main {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 700;
+            font-size: 1.4rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .logo-pill {
+            padding: 3px 10px;
+            border-radius: 999px;
+            font-size: 0.65rem;
+            border: 1px solid rgba(148,163,184,0.7);
+            color: var(--text-secondary);
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 0.9rem;
+        }
+
+        .search-container {
+            position: relative;
+            flex: 1;
+            max-width: 450px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.7rem 0.9rem 0.7rem 2.4rem;
+            border-radius: 999px;
+            border: 1px solid rgba(148,163,184,0.6);
+            background: color-mix(in srgb, var(--bg-primary) 80%, rgba(15,23,42,0.06));
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .search-input::placeholder {
+            color: var(--text-secondary);
+        }
+
+        .search-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 1px rgba(37,99,235,0.6);
+            background: var(--bg-secondary);
+        }
+
+        .search-icon {
+            position: absolute;
+            top: 50%;
+            left: 0.9rem;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .theme-toggle {
+            width: 40px;
+            height: 40px;
+            border-radius: 999px;
+            border: 1px solid rgba(148,163,184,0.7);
+            background: color-mix(in srgb, var(--bg-primary) 75%, rgba(15,23,42,0.12));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-secondary);
+            backdrop-filter: blur(8px);
+            transition: var(--transition);
+        }
+
+        .theme-toggle:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            border: 1px solid rgba(148,163,184,0.7);
+            border-radius: 999px;
+            padding: 0.45rem 0.9rem;
+            background: color-mix(in srgb, var(--bg-secondary) 85%, transparent);
+            color: var(--text-secondary);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.8rem;
+            cursor: pointer;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .user-chip {
+            padding: 0.35rem 0.7rem;
+            border-radius: 999px;
+            background: color-mix(in srgb, rgba(22,163,74,0.15), var(--bg-secondary) 70%);
+            border: 1px solid rgba(34,197,94,0.4);
+            font-size: 0.78rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            cursor: pointer;
+        }
+
+        .user-avatar-sm {
+            width: 24px;
+            height: 24px;
+            border-radius: 999px;
+            background: linear-gradient(135deg, #4ade80, #22c55e);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            color: #022c22;
+            font-weight: 700;
+        }
+
+        .cart-badge {
+            width: 26px;
+            height: 26px;
+            border-radius: 999px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: #f9fafb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 0.6rem;
+            margin: 1.4rem 0 1.1rem;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 0.45rem 0.75rem;
+            border-radius: 999px;
+            border: 1px solid transparent;
+            font-size: 0.78rem;
+            cursor: pointer;
+            background: transparent;
+            color: var(--text-secondary);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            white-space: nowrap;
+        }
+
+        .tab-btn.active {
+            background: color-mix(in srgb, var(--primary) 90%, #000 10%);
+            color: #eff6ff;
+            border-color: transparent;
+            box-shadow: 0 10px 24px rgba(37,99,235,0.55);
+        }
+
+        /* Hero */
+        .hero {
+            margin-top: 1.6rem;
+            border-radius: 24px;
+            padding: 2.4rem 2.3rem;
+            background:
+                radial-gradient(circle at top left, rgba(56,189,248,0.26), transparent 45%),
+                radial-gradient(circle at bottom right, rgba(234,179,8,0.18), transparent 55%),
+                linear-gradient(135deg, #0f172a, #020617);
+            color: #e5e7eb;
+            box-shadow: 0 28px 80px rgba(15,23,42,0.9);
+            display: grid;
+            grid-template-columns: 1.4fr 1fr;
+            gap: 2.3rem;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .hero-left h1 {
+            font-size: clamp(2.1rem, 3.1vw, 2.7rem);
+            margin-bottom: 0.6rem;
+        }
+
+        .hero-left p {
+            color: #9ca3af;
+            font-size: 0.98rem;
+            max-width: 460px;
+        }
+
+        .hero-cards-row {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0,1fr));
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+        }
+
+        .hero-mini-card {
+            background: rgba(15,23,42,0.9);
+            border-radius: 14px;
+            border: 1px solid rgba(148,163,184,0.4);
+            padding: 0.5rem 0.7rem;
+            font-size: 0.72rem;
+        }
+
+        .hero-cover-stack {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero-cover-stack img {
+            width: 100%;
+            max-width: 260px;
+            border-radius: 20px;
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.9);
+            transform: rotate(-4deg);
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .hero-cover-stack img:hover {
+            transform: rotate(-1deg) translateY(-4px) scale(1.02);
+            box-shadow: 0 30px 80px rgba(0,0,0,1);
+        }
+
+        .hero-pill {
+            position: absolute;
+            top: 58%;
+            left: 62%;
+            transform: translate(-50%, -50%);
+            padding: 0.55rem 0.9rem;
+            background: rgba(15,23,42,0.9);
+            border-radius: 999px;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.75rem;
+            border: 1px solid rgba(148,163,184,0.7);
+        }
+
+        /* Layout */
+        .main-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1.8fr) minmax(260px, 0.95fr);
+            gap: 1.8rem;
+            margin-top: 2.4rem;
+        }
+
+        .content-area {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        /* Book Grid + hover */
+        .book-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+            gap: 1.3rem;
+        }
+
+        .book-item {
+            background: color-mix(in srgb, var(--bg-elevated) 90%, rgba(15,23,42,0.06));
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(148,163,184,0.4);
+            display: flex;
+            flex-direction: column;
+            min-height: 340px;
+            transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+        }
+
+        .book-item:hover {
+            transform: translateY(-6px) scale(1.01);
+            box-shadow: 0 24px 60px rgba(15,23,42,0.5);
+            border-color: rgba(59,130,246,0.7);
+        }
+
+        .book-image {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            transition: transform 0.35s ease;
+        }
+
+        .book-item:hover .book-image {
+            transform: scale(1.08) rotate(-1deg);
+        }
+
+        .book-info {
+            padding: 0.9rem 1rem 1rem 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+            flex: 1;
+        }
+
+        .book-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .book-author {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .book-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            margin-top: 0.25rem;
+        }
+
+        .badge {
+            padding: 0.15rem 0.45rem;
+            border-radius: 999px;
+            border: 1px solid rgba(148,163,184,0.6);
+            font-size: 0.7rem;
+        }
+
+        .book-footer {
+            display: flex;
+            align-items: center;
+            margin-top: 0.6rem;
+            gap: 0.45rem;
+        }
+
+        .price {
+            font-weight: 700;
+            color: var(--accent);
+            font-size: 0.95rem;
+        }
+
+        .btn-primary {
+            border-radius: 999px;
+            border: none;
+            padding: 0.35rem 0.8rem;
+            font-size: 0.8rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            cursor: pointer;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: #eff6ff;
+            box-shadow: 0 10px 22px rgba(37,99,235,0.6);
+        }
+
+        .btn-primary:hover {
+            filter: brightness(1.05);
+            transform: translateY(-1px);
+        }
+
+        .stars {
+            color: #facc15;
+            font-size: 0.7rem;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: sticky;
+            top: 88px;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .sidebar-section {
+            background: color-mix(in srgb, var(--bg-elevated) 90%, rgba(15,23,42,0.05));
+            border-radius: 18px;
+            padding: 1.1rem 1.1rem 1.2rem;
+            border: 1px solid rgba(148,163,184,0.5);
+            box-shadow: var(--shadow);
+        }
+
+        .sidebar-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 0.4rem;
+        }
+
+        .sidebar-sub {
+            font-size: 0.78rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.7rem;
+        }
+
+        .filter-group {
+            margin-bottom: 0.7rem;
+        }
+
+        .filter-group label {
+            display: block;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.25rem;
+        }
+
+        .filter-input {
+            width: 100%;
+            padding: 0.5rem 0.6rem;
+            border-radius: 10px;
+            border: 1px solid rgba(148,163,184,0.6);
+            background: color-mix(in srgb, var(--bg-secondary) 90%, rgba(15,23,42,0.04));
+            color: var(--text-primary);
+            font-size: 0.8rem;
+        }
+
+        .cart-item {
+            display: flex;
+            gap: 0.6rem;
+            padding: 0.5rem 0;
+            border-bottom: 1px dashed rgba(148,163,184,0.5);
+        }
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+        .cart-image {
+            width: 38px;
+            height: 52px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+        .cart-details {
+            flex: 1;
+        }
+
+        .cart-details h4 {
+            font-size: 0.78rem;
+            margin-bottom: 0.15rem;
+        }
+
+        .cart-price {
+            font-size: 0.78rem;
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        /* Media */
+        .media-container {
+            background: color-mix(in srgb, var(--bg-elevated) 90%, rgba(15,23,42,0.05));
+            border-radius: 18px;
+            padding: 1rem 1.1rem 1.2rem;
+            border: 1px solid rgba(148,163,184,0.5);
+            box-shadow: var(--shadow);
+        }
+
+        .media-container h3 {
+            font-size: 1rem;
+            margin-bottom: 0.7rem;
+        }
+
+        audio,
+        video {
+            width: 100%;
+            border-radius: 12px;
+            outline: none;
+        }
+
+        /* Profile & History */
+        .profile-section {
+            margin-top: 1rem;
+            background: color-mix(in srgb, var(--bg-elevated) 90%, rgba(15,23,42,0.05));
+            border-radius: 18px;
+            padding: 1rem 1.1rem 1.2rem;
+            border: 1px solid rgba(148,163,184,0.5);
+            box-shadow: var(--shadow);
+        }
+
+        .profile-header {
+            display: flex;
+            gap: 0.7rem;
+            align-items: center;
+            margin-bottom: 0.6rem;
+        }
+
+        .profile-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 999px;
+            background: linear-gradient(135deg, #4ade80, #22c55e);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #022c22;
+            font-weight: 700;
+        }
+
+        .profile-meta {
+            font-size: 0.78rem;
+            color: var(--text-secondary);
+        }
+
+        .history-list {
+            margin-top: 0.4rem;
+            max-height: 140px;
+            overflow: auto;
+            padding-right: 0.2rem;
+        }
+
+        .history-item {
+            font-size: 0.78rem;
+            padding: 0.25rem 0;
+            border-bottom: 1px dashed rgba(148,163,184,0.4);
+        }
+
+        .history-item:last-child {
+            border-bottom: none;
+        }
+
+        /* Follow Authors */
+        .author-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.6rem 0;
+            border-bottom: 1px dashed rgba(148,163,184,0.5);
+            font-size: 0.85rem;
+        }
+
+        .author-card:last-child {
+            border-bottom: none;
+        }
+
+        .follow-btn {
+            padding: 0.3rem 0.7rem;
+            border-radius: 999px;
+            border: 1px solid rgba(148,163,184,0.7);
+            background: color-mix(in srgb, var(--bg-secondary) 90%, rgba(15,23,42,0.05));
+            font-size: 0.75rem;
+            cursor: pointer;
+        }
+
+        .follow-btn.following {
+            background: linear-gradient(135deg, var(--success), #16a34a);
+            border-color: transparent;
+            color: #022c22;
+            box-shadow: 0 10px 20px rgba(34,197,94,0.5);
+        }
+
+        /* Shopping Grab Now bar */
+        .grab-bar {
+            margin-top: 0.4rem;
+            width: 100%;
+            height: 8px;
+            border-radius: 999px;
+            background: rgba(148,163,184,0.35);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .grab-bar-fill {
+            height: 100%;
+            width: 70%;
+            background: linear-gradient(90deg, var(--accent), var(--primary));
+            position: relative;
+        }
+
+        .grab-now-pill {
+            margin-top: 0.4rem;
+            font-size: 0.75rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.2rem 0.6rem;
+            border-radius: 999px;
+            background: rgba(249,115,22,0.12);
+            color: var(--accent);
+        }
+
+        /* Timetable */
+        .timetable-grid {
+            display: grid;
+            grid-template-columns: repeat(7, minmax(0, 1fr));
+            gap: 0.4rem;
+            margin-top: 0.7rem;
+            font-size: 0.78rem;
+        }
+
+        .timetable-cell {
+            border-radius: 10px;
+            border: 1px dashed rgba(148,163,184,0.5);
+            padding: 0.35rem 0.45rem;
+            min-height: 56px;
+        }
+
+        .timetable-day {
+            font-weight: 600;
+            margin-bottom: 0.15rem;
+        }
+
+
+        /* Checkout modal */
+        .modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(15,23,42,0.65);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 999;
+        }
+
+        .modal {
+            background: var(--bg-secondary);
+            border-radius: 18px;
+            padding: 1.4rem 1.5rem 1.6rem;
+            max-width: 420px;
+            width: 100%;
+            box-shadow: 0 30px 80px rgba(15,23,42,0.9);
+            border: 1px solid rgba(148,163,184,0.7);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.7rem;
+        }
+
+        .modal-title {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+        }
+
+        .payment-option {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 0.6rem;
+            border-radius: 10px;
+            border: 1px solid rgba(148,163,184,0.5);
+            margin-top: 0.4rem;
+            cursor: pointer;
+            font-size: 0.82rem;
+        }
+
+        .payment-option.selected {
+            border-color: var(--primary);
+            box-shadow: 0 10px 26px rgba(37,99,235,0.4);
+        }
+
+        .modal-footer-btn {
+            margin-top: 0.9rem;
+            width: 100%;
+            padding: 0.6rem 0.8rem;
+            border-radius: 999px;
+            border: none;
+            cursor: pointer;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: #eff6ff;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        /* Footer */
+        footer {
+            margin-top: 3rem;
+            padding: 1.8rem 0 1rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            text-align: center;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .auth-card {
+                grid-template-columns: 1fr;
+            }
+            .auth-visual {
+                display: none;
+            }
+            .hero {
+                grid-template-columns: 1fr;
+            }
+            .hero-cover-stack {
+                display: none;
+            }
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+            .sidebar {
+                position: static;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-wrap: wrap;
+            }
+            .search-container {
+                order: 3;
+                width: 100%;
+            }
+            .hero {
+                padding: 1.8rem 1.5rem;
+            }
+            .tabs {
+                margin-top: 1.1rem;
+            }
+        }
+/* ONLY TARGET THIS COMPONENT */
+.about-queen {
+  width: 100%;
+  max-width: 850px;
+  margin: 30px auto;
+
+  background: linear-gradient(135deg, #ffffff, #f9f9ff);
+  padding: 35px 40px;
+  border-radius: 25px;
+
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+  backdrop-filter: blur(10px);
+
+  transition: all 0.3s ease;
+}
+
+.about-queen:hover {
+  transform: translateY(-5px) scale(1.01);
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.12);
+}
+
+/* TITLE */
+.about-queen h3 {
+  font-size: 2rem;
+  font-weight: 700;
+  background: linear-gradient(90deg, #ff758c, #7a5cff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 15px;
+}
+
+/* SUB HEADINGS */
+.about-queen h4 {
+  margin-top: 20px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #444;
+}
+
+/* TEXT */
+.about-queen p {
+  color: #555;
+  line-height: 1.7;
+  margin-top: 8px;
+}
+
+/* LIST */
+.about-queen ul {
+  margin-top: 10px;
+  padding-left: 20px;
+}
+
+.about-queen li {
+  margin-bottom: 10px;
+  line-height: 1.6;
+  transition: 0.2s ease;
+}
+
+/* Bullet styling */
+.about-queen li::marker {
+  color: #7a5cff;
+}
+
+/* Hover effect */
+.about-queen li:hover {
+  color: #7a5cff;
+  transform: translateX(5px);
+}
+
+/* Divider */
+.about-queen hr {
+  border: none;
+  height: 1px;
+  margin: 20px 0;
+  background: linear-gradient(to right, transparent, #ccc, transparent);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .about-queen {
+    padding: 25px 20px;
+  }
+
+  .about-queen h3 {
+    font-size: 1.6rem;
+  }
+}
+/* Moving grab wrapper */
+.grab-wrapper {
+  position: fixed;
+  bottom: 15px;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  z-index: 999;
+  pointer-events: none;
+}
+
+/* Moving box */
+.grab-box {
+  display: inline-block;
+  padding: 10px 22px;
+  background: linear-gradient(90deg, #ff758c, #7a5cff);
+  color: #fff;
+  font-weight: 600;
+  border-radius: 25px;
+  white-space: nowrap;
+
+  box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+
+  animation: grabMove 10s linear infinite;
+
+  pointer-events: auto;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+/* Animation */
+@keyframes grabMove {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100vw);
+  }
+}
+
+/* Hover effect */
+.grab-box:hover {
+  box-shadow: 0 0 15px #7a5cff, 0 0 30px #ff758c;
+  transform: scale(1.05);
+}
+
+/* Existing pill styling (optional improve) */
+.grab-now-pill {
+  margin-top: 15px;
+  display: inline-block;
+  padding: 8px 16px;
+  border-radius: 20px;
+  background: #111;
+  color: #fff;
+  font-size: 0.85rem;
+}
+.review-wow {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 30px;
+
+  background: linear-gradient(135deg, #fff, #f9f9ff);
+  border-radius: 25px;
+
+  box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+  transition: 0.3s ease;
+}
+
+.review-wow:hover {
+  transform: scale(1.01);
+}
+
+/* Title */
+.review-wow h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  background: linear-gradient(90deg, #ff758c, #7a5cff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Question blocks */
+.review-question {
+  margin-bottom: 18px;
+}
+
+.review-question label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+/* Inputs */
+.review-wow input,
+.review-wow select,
+.review-wow textarea {
+  width: 100%;
+  padding: 10px;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  outline: none;
+  transition: 0.2s;
+}
+
+.review-wow input:focus,
+.review-wow textarea:focus {
+  border-color: #7a5cff;
+  box-shadow: 0 0 10px rgba(122,92,255,0.2);
+}
+
+/* Emoji options */
+.emoji-options {
+  display: flex;
+  gap: 10px;
+}
+
+.emoji-options span {
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.emoji-options span:hover {
+  transform: scale(1.3);
+}
+
+/* Toggle buttons */
+.toggle-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.toggle-buttons button {
+  flex: 1;
+  padding: 8px;
+  border: none;
+  border-radius: 10px;
+  background: #eee;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.toggle-buttons button:hover {
+  background: #7a5cff;
+  color: black;
+}
+
+/* Submit button */
+.submit-review {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 20px;
+
+  background: linear-gradient(90deg, #ff758c, #7a5cff);
+  color: white;
+  font-weight: 600;
+
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.submit-review:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+/* Row layout instead of cramped grid */
+.author-row {
+  display: flex;
+  gap: 25px;
+  overflow-x: auto;
+  padding: 10px 5px;
+}
+
+/* Card */
+.author-card {
+  min-width: 150px;
+  background: #fff;
+  border-radius: 18px;
+  padding: 15px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+  transition: 0.3s ease;
+}
+
+.author-card:hover {
+  transform: translateY(-6px) scale(1.03);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+}
+
+/* Image */
+.author-card img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 20px;
+  margin-bottom: 10px;
+}
+
+/* Info */
+.author-info {
+  text-align: center;
+}
+
+/* Name */
+.author-name {
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin-bottom: 5px;
+}
+
+/* Rating */
+.author-rating {
+  font-size: 0.85rem;
+  color: #ffb400;
+}
+
+.author-rating span {
+  margin-left: 5px;
+  color: #555;
+}
+
+/* Fix text spacing */
+.sub-text {
+  font-size: 0.9rem;
+  margin-bottom: 15px;
+  color: #666;
+}
+
+/* Smooth scroll bar (optional) */
+.author-row::-webkit-scrollbar {
+  height: 6px;
+}
+.author-row::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 10px;
+}
+/* GRID */
+.timetable-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 18px;
+  margin-top: 15px;
+}
+
+/* CELL */
+.timetable-cell {
+  padding: 15px;
+  border-radius: 18px;
+
+  background: linear-gradient(135deg, #7a5cff, #ff758c);
+  color: white;
+
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Glow effect */
+.timetable-cell::before {
+  content: "";
+  position: absolute;
+  width: 150%;
+  height: 150%;
+  background: radial-gradient(circle, rgba(255,255,255,0.2), transparent);
+  top: -50%;
+  left: -50%;
+  transform: rotate(25deg);
+  opacity: 0;
+  transition: 0.4s;
+}
+
+/* Hover animation */
+.timetable-cell:hover {
+  transform: translateY(-8px) scale(1.05);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+}
+
+/* Glow appears */
+.timetable-cell:hover::before {
+  opacity: 1;
+}
+
+/* DAY TEXT */
+.timetable-day {
+  font-weight: 700;
+  font-size: 1rem;
+  margin-bottom: 8px;
+  letter-spacing: 1px;
+}
+
+/* TIME TEXT */
+.timetable-cell div:last-child {
+  font-size: 0.75rem;
+  line-height: 1.4;
+  opacity: 0.95;
+}
+
+/* OPTIONAL: DIFFERENT COLORS PER DAY (VERY COOL) */
+.timetable-cell:nth-child(1) { background: linear-gradient(135deg, #ff758c, #ff7eb3); }
+.timetable-cell:nth-child(2) { background: linear-gradient(135deg, #7a5cff, #5ce1e6); }
+.timetable-cell:nth-child(3) { background: linear-gradient(135deg, #43e97b, #38f9d7); }
+.timetable-cell:nth-child(4) { background: linear-gradient(135deg, #f7971e, #ffd200); }
+.timetable-cell:nth-child(5) { background: linear-gradient(135deg, #00c6ff, #0072ff); }
+.timetable-cell:nth-child(6) { background: linear-gradient(135deg, #ff512f, #dd2476); }
+.timetable-cell:nth-child(7) { background: linear-gradient(135deg, #11998e, #38ef7d); }
+
+/* TITLE */
+.media-container h3 {
+  font-size: 1.3rem;
+  margin-bottom: 10px;
+}
+    </style>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+const { useState, useEffect, useCallback } = React;
+
+// 60 books
+const allBooks = [
+    { id: 1, title: "The Midnight Library", author: "Matt Haig", rating: 4.3, price: 14.99, genre: "Fiction", image: "https://images.unsplash.com/photo-1524985069026-dd778a71c7b4?auto=format&fit=crop&w=800&q=80" },
+    { id: 2, title: "Atomic Habits", author: "James Clear", rating: 4.8, price: 12.99, genre: "Self-Help", image: "https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=800&q=80" },
+    { id: 3, title: "Dune", author: "Frank Herbert", rating: 4.6, price: 18.5, genre: "Sci-Fi", image: "https://images.unsplash.com/photo-1463320726281-696a485928c7?auto=format&fit=crop&w=800&q=80" },
+    { id: 4, title: "Sapiens", author: "Yuval Noah Harari", rating: 4.7, price: 16.49, genre: "History", image: "https://images.unsplash.com/photo-1471107340929-a87cd0f5b5f3?auto=format&fit=crop&w=800&q=80" },
+    { id: 5, title: "The Psychology of Money", author: "Morgan Housel", rating: 4.5, price: 13.99, genre: "Finance", image: "https://images.unsplash.com/photo-1516979187457-637abb4f9353?auto=format&fit=crop&w=800&q=80" },
+    { id: 6, title: "1984", author: "George Orwell", rating: 4.4, price: 10.99, genre: "Dystopian", image: "https://images.unsplash.com/photo-1495446815901-a7297e633e8d?auto=format&fit=crop&w=800&q=80" },
+    { id: 7, title: "To Kill a Mockingbird", author: "Harper Lee", rating: 4.8, price: 11.49, genre: "Classic", image: "https://images.unsplash.com/photo-1544936207-0e51661945a0?auto=format&fit=crop&w=800&q=80" },
+    { id: 8, title: "The Great Gatsby", author: "F. Scott Fitzgerald", rating: 4.1, price: 9.99, genre: "Classic", image: "https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=800&q=80" },
+    { id: 9, title: "Educated", author: "Tara Westover", rating: 4.6, price: 13.49, genre: "Memoir", image: "https://images.unsplash.com/photo-1528207776546-365bb710ee93?auto=format&fit=crop&w=800&q=80" },
+    { id: 10, title: "Becoming", author: "Michelle Obama", rating: 4.7, price: 15.99, genre: "Memoir", image: "https://images.unsplash.com/photo-1528207776546-365bb710ee93?auto=format&fit=crop&w=800&q=80" },
+    { id: 11, title: "The Alchemist", author: "Paulo Coelho", rating: 4.3, price: 9.49, genre: "Fiction", image: "https://images.unsplash.com/photo-1463320726281-696a485928c7?auto=format&fit=crop&w=800&q=80" },
+    { id: 12, title: "Thinking, Fast and Slow", author: "Daniel Kahneman", rating: 4.4, price: 14.25, genre: "Psychology", image: "https://images.unsplash.com/photo-1495446815901-a7297e633e8d?auto=format&fit=crop&w=800&q=80" },
+    { id: 13, title: "Deep Work", author: "Cal Newport", rating: 4.5, price: 12.75, genre: "Self-Help", image: "https://images.unsplash.com/photo-1509023464722-18d996393ca8?auto=format&fit=crop&w=800&q=80" },
+    { id: 14, title: "The Pragmatic Programmer", author: "Andrew Hunt", rating: 4.7, price: 32.99, genre: "Technology", image: "https://images.unsplash.com/photo-1517430816045-df4b7de11d1d?auto=format&fit=crop&w=800&q=80" },
+    { id: 15, title: "Clean Code", author: "Robert C. Martin", rating: 4.6, price: 29.99, genre: "Technology", image: "https://images.unsplash.com/photo-1587620962725-abab7fe55159?auto=format&fit=crop&w=800&q=80" },
+    { id: 16, title: "The Hobbit", author: "J.R.R. Tolkien", rating: 4.7, price: 13.99, genre: "Fantasy", image: "https://images.unsplash.com/photo-1455884981818-54cb785db6fc?auto=format&fit=crop&w=800&q=80" },
+    { id: 17, title: "The Lord of the Rings", author: "J.R.R. Tolkien", rating: 4.9, price: 35.99, genre: "Fantasy", image: "https://images.unsplash.com/photo-1455884981818-54cb785db6fc?auto=format&fit=crop&w=800&q=80" },
+    { id: 18, title: "Harry Potter and the Sorcerer's Stone", author: "J.K. Rowling", rating: 4.8, price: 11.99, genre: "Fantasy", image: "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&w=800&q=80" },
+    { id: 19, title: "The Subtle Art of Not Giving a F*ck", author: "Mark Manson", rating: 4.1, price: 12.49, genre: "Self-Help", image: "https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=800&q=80" },
+    { id: 20, title: "Rich Dad Poor Dad", author: "Robert Kiyosaki", rating: 4.2, price: 10.49, genre: "Finance", image: "https://images.unsplash.com/photo-1516979187457-637abb4f9353?auto=format&fit=crop&w=800&q=80" },
+    { id: 21, title: "Ikigai", author: "Héctor García", rating: 4.3, price: 11.99, genre: "Self-Help", image: "https://images.unsplash.com/photo-1484415063229-30e1c541aaec?auto=format&fit=crop&w=800&q=80" },
+    { id: 22, title: "Norwegian Wood", author: "Haruki Murakami", rating: 4.2, price: 13.99, genre: "Fiction", image: "https://images.unsplash.com/photo-1463320726281-696a485928c7?auto=format&fit=crop&w=800&q=80" },
+    { id: 23, title: "Kafka on the Shore", author: "Haruki Murakami", rating: 4.1, price: 14.99, genre: "Fiction", image: "https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=800&q=80" },
+    { id: 24, title: "The Silent Patient", author: "Alex Michaelides", rating: 4.2, price: 13.49, genre: "Thriller", image: "https://images.unsplash.com/photo-1473862170180-01c1cde0ed87?auto=format&fit=crop&w=800&q=80" },
+    { id: 25, title: "The Girl on the Train", author: "Paula Hawkins", rating: 4.0, price: 11.49, genre: "Thriller", image: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80" },
+    { id: 26, title: "The Da Vinci Code", author: "Dan Brown", rating: 4.1, price: 10.99, genre: "Thriller", image: "https://images.unsplash.com/photo-1516979187457-637abb4f9353?auto=format&fit=crop&w=800&q=80" },
+    { id: 27, title: "Angels & Demons", author: "Dan Brown", rating: 4.2, price: 10.99, genre: "Thriller", image: "https://images.unsplash.com/photo-1528207776546-365bb710ee93?auto=format&fit=crop&w=800&q=80" },
+    { id: 28, title: "The Lean Startup", author: "Eric Ries", rating: 4.3, price: 14.49, genre: "Business", image: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=800&q=80" },
+    { id: 29, title: "Zero to One", author: "Peter Thiel", rating: 4.1, price: 13.99, genre: "Business", image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=800&q=80" },
+    { id: 30, title: "Hooked", author: "Nir Eyal", rating: 4.2, price: 12.99, genre: "Business", image: "https://images.unsplash.com/photo-1545239351-1141bd82e8a6?auto=format&fit=crop&w=800&q=80" },
+    { id: 31, title: "Cracking the Coding Interview", author: "Gayle Laakmann McDowell", rating: 4.8, price: 39.99, genre: "Technology", image: "https://images.unsplash.com/photo-1517433456452-f9633a875f6f?auto=format&fit=crop&w=800&q=80" },
+    { id: 32, title: "Introduction to Algorithms", author: "Cormen et al.", rating: 4.6, price: 49.99, genre: "Technology", image: "https://images.unsplash.com/photo-1588200908342-23b585c03e26?auto=format&fit=crop&w=800&q=80" },
+    { id: 33, title: "The Design of Everyday Things", author: "Don Norman", rating: 4.4, price: 16.99, genre: "Design", image: "https://images.unsplash.com/photo-1519710164239-da123dc03ef4?auto=format&fit=crop&w=800&q=80" },
+    { id: 34, title: "Don't Make Me Think", author: "Steve Krug", rating: 4.5, price: 19.99, genre: "Design", image: "https://images.unsplash.com/photo-1484415063229-30e1c541aaec?auto=format&fit=crop&w=800&q=80" },
+    { id: 35, title: "The War of Art", author: "Steven Pressfield", rating: 4.3, price: 11.99, genre: "Creativity", image: "https://images.unsplash.com/photo-1455884981818-54cb785db6fc?auto=format&fit=crop&w=800&q=80" },
+    { id: 36, title: "Big Magic", author: "Elizabeth Gilbert", rating: 4.2, price: 12.49, genre: "Creativity", image: "https://images.unsplash.com/photo-1455884981818-54cb785db6fc?auto=format&fit=crop&w=800&q=80" },
+    { id: 37, title: "Born a Crime", author: "Trevor Noah", rating: 4.8, price: 13.49, genre: "Memoir", image: "https://images.unsplash.com/photo-1528207776546-365bb710ee93?auto=format&fit=crop&w=800&q=80" },
+    { id: 38, title: "The Power of Habit", author: "Charles Duhigg", rating: 4.4, price: 14.99, genre: "Self-Help", image: "https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=800&q=80" },
+    { id: 39, title: "Grit", author: "Angela Duckworth", rating: 4.3, price: 13.49, genre: "Self-Help", image: "https://images.unsplash.com/photo-1509023464722-18d996393ca8?auto=format&fit=crop&w=800&q=80" },
+    { id: 40, title: "Quiet", author: "Susan Cain", rating: 4.5, price: 13.99, genre: "Psychology", image: "https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=800&q=80" },
+    { id: 41, title: "Steve Jobs", author: "Walter Isaacson", rating: 4.6, price: 17.99, genre: "Biography", image: "https://images.unsplash.com/photo-1509023464722-18d996393ca8?auto=format&fit=crop&w=800&q=80" },
+    { id: 42, title: "Elon Musk", author: "Ashlee Vance", rating: 4.4, price: 16.49, genre: "Biography", image: "https://images.unsplash.com/photo-1516979187457-637abb4f9353?auto=format&fit=crop&w=800&q=80" },
+    { id: 43, title: "The Martian", author: "Andy Weir", rating: 4.6, price: 12.49, genre: "Sci-Fi", image: "https://images.unsplash.com/photo-1528207776546-365bb710ee93?auto=format&fit=crop&w=800&q=80" },
+    { id: 44, title: "Project Hail Mary", author: "Andy Weir", rating: 4.7, price: 15.99, genre: "Sci-Fi", image: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=800&q=80" },
+    { id: 45, title: "The Name of the Wind", author: "Patrick Rothfuss", rating: 4.6, price: 14.49, genre: "Fantasy", image: "https://images.unsplash.com/photo-1455884981818-54cb785db6fc?auto=format&fit=crop&w=800&q=80" },
+    { id: 46, title: "Mistborn", author: "Brandon Sanderson", rating: 4.7, price: 13.99, genre: "Fantasy", image: "https://images.unsplash.com/photo-1545239351-1141bd82e8a6?auto=format&fit=crop&w=800&q=80" },
+    { id: 47, title: "The Catcher in the Rye", author: "J.D. Salinger", rating: 3.9, price: 9.49, genre: "Classic", image: "https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=800&q=80" },
+    { id: 48, title: "Pride and Prejudice", author: "Jane Austen", rating: 4.5, price: 8.99, genre: "Classic", image: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80" },
+    { id: 49, title: "Meditations", author: "Marcus Aurelius", rating: 4.4, price: 9.99, genre: "Philosophy", image: "https://images.unsplash.com/photo-1545239351-1141bd82e8a6?auto=format&fit=crop&w=800&q=80" },
+    { id: 50, title: "Man's Search for Meaning", author: "Viktor E. Frankl", rating: 4.8, price: 11.49, genre: "Philosophy", image: "https://images.unsplash.com/photo-1463320726281-696a485928c7?auto=format&fit=crop&w=800&q=80" },
+    { id: 51, title: "The Four Agreements", author: "Don Miguel Ruiz", rating: 4.5, price: 10.99, genre: "Spirituality", image: "https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=800&q=80" },
+    { id: 52, title: "The 7 Habits of Highly Effective People", author: "Stephen R. Covey", rating: 4.6, price: 14.99, genre: "Self-Help", image: "https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=800&q=80" },
+    { id: 53, title: "Thinking in Systems", author: "Donella H. Meadows", rating: 4.5, price: 15.49, genre: "Science", image: "https://images.unsplash.com/photo-1588200908342-23b585c03e26?auto=format&fit=crop&w=800&q=80" },
+    { id: 54, title: "Astrophysics for People in a Hurry", author: "Neil deGrasse Tyson", rating: 4.3, price: 11.99, genre: "Science", image: "https://images.unsplash.com/photo-1545239351-1141bd82e8a6?auto=format&fit=crop&w=800&q=80" },
+    { id: 55, title: "The Art of Computer Programming", author: "Donald Knuth", rating: 4.7, price: 59.99, genre: "Technology", image: "https://images.unsplash.com/photo-1588200908342-23b585c03e26?auto=format&fit=crop&w=800&q=80" },
+    { id: 56, title: "Designing Data-Intensive Applications", author: "Martin Kleppmann", rating: 4.8, price: 44.99, genre: "Technology", image: "https://images.unsplash.com/photo-1588216316012-1e9a26a5a94b?auto=format&fit=crop&w=800&q=80" },
+    { id: 57, title: "Algorithms to Live By", author: "Brian Christian", rating: 4.4, price: 13.99, genre: "Science", image: "https://images.unsplash.com/photo-1553877522-43269d4ea984?auto=format&fit=crop&w=800&q=80" },
+    { id: 58, title: "The Little Prince", author: "Antoine de Saint-Exupéry", rating: 4.7, price: 7.99, genre: "Fiction", image: "https://images.unsplash.com/photo-1545239351-1141bd82e8a6?auto=format&fit=crop&w=800&q=80" },
+    { id: 59, title: "The Road", author: "Cormac McCarthy", rating: 4.1, price: 10.99, genre: "Fiction", image: "https://images.unsplash.com/photo-1471107340929-a87cd0f5b5f3?auto=format&fit=crop&w=800&q=80" },
+    { id: 60, title: "The Shining", author: "Stephen King", rating: 4.5, price: 12.99, genre: "Horror", image: "https://images.unsplash.com/photo-1463320726281-696a485928c7?auto=format&fit=crop&w=800&q=80" }
+];
+
+const mockAudiobooks = [
+    { id: 1, title: "Atomic Habits (Audiobook)", duration: "5h 35m" },
+    { id: 2, title: "The Midnight Library (Audiobook)", duration: "8h 47m" }
+];
+
+const ThemeToggle = ({ onToggle }) => {
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => setMounted(true), []);
+
+    const toggleTheme = () => {
+        const current = document.documentElement.getAttribute("data-theme") || "light";
+        const next = current === "dark" ? "light" : "dark";
+        document.documentElement.setAttribute("data-theme", next);
+        localStorage.setItem("theme", next);
+        if (onToggle) onToggle(next);
+    };
+
+    if (!mounted) return null;
+
+    const isDark = (document.documentElement.getAttribute("data-theme") || "light") === "dark";
+
+    return (
+        <button className="theme-toggle" onClick={toggleTheme} title="Toggle theme">
+            <i className={isDark ? "fas fa-sun" : "fas fa-moon"}></i>
+        </button>
+    );
+};
+
+const SearchBar = ({ search, setSearch }) => (
+    <div className="search-container">
+        <i className="fas fa-search search-icon" />
+        <input
+            className="search-input"
+            placeholder="Search by title, author or genre..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+        />
+    </div>
+);
+
+const BookCard = ({ book, onAddToCart, onOpen }) => {
+    const stars = Array.from({ length: 5 }).map((_, i) => (
+        <i
+            key={i}
+            className={`fas fa-star${i < Math.round(book.rating) ? "" : "-o"}`}
+            style={{ marginRight: 2 }}
+        />
+    ));
+    return (
+        <div className="book-item">
+            <img src={book.image} alt={book.title} className="book-image" loading="lazy" onClick={() => onOpen(book)} />
+            <div className="book-info">
+                <div className="book-title">{book.title}</div>
+                <div className="book-author">by {book.author}</div>
+                <div className="book-meta">
+                    <div className="stars">{stars}</div>
+                    <span style={{ fontSize: "0.78rem" }}>★ {book.rating.toFixed(1)}</span>
+                </div>
+                <div className="book-meta" style={{ marginTop: 4 }}>
+                    <span className="badge">{book.genre}</span>
+                    <span className="price">${book.price.toFixed(2)}</span>
+                </div>
+                <div className="book-footer">
+                    <button className="btn-primary" onClick={() => onAddToCart(book)}>
+                        <i className="fas fa-cart-plus" />
+                        Add
+                    </button>
+                    <button
+                        className="btn-secondary"
+                        style={{ marginLeft: "auto", padding: "0.35rem 0.7rem" }}
+                        onClick={() => onOpen(book)}
+                    >
+                        <i className="fas fa-book-open" />
+                        Details
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+const Sidebar = ({ filters, onFilterChange, cart, onRemove, profile, history, onCheckoutClick }) => {
+    const total = cart.reduce((sum, item) => sum + item.price, 0);
+
+    return (
+        <aside className="sidebar">
+            <div className="sidebar-section">
+                <div className="sidebar-title">Filters</div>
+                <div className="sidebar-sub">Refine your universe of books.</div>
+                <div className="filter-group">
+                    <label>Genre</label>
+                    <select
+                        className="filter-input"
+                        value={filters.genre}
+                        onChange={(e) => onFilterChange("genre", e.target.value)}
+                    >
+                        <option value="">All genres</option>
+                        {[
+                            "Fiction",
+                            "Self-Help",
+                            "Sci-Fi",
+                            "History",
+                            "Finance",
+                            "Dystopian",
+                            "Classic",
+                            "Memoir",
+                            "Psychology",
+                            "Technology",
+                            "Fantasy",
+                            "Thriller",
+                            "Business",
+                            "Design",
+                            "Creativity",
+                            "Biography",
+                            "Philosophy",
+                            "Spirituality",
+                            "Science",
+                            "Horror"
+                        ].map((g) => (
+                            <option key={g} value={g}>
+                                {g}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+                <div className="filter-group">
+                    <label>Minimum rating</label>
+                    <select
+                        className="filter-input"
+                        value={filters.rating}
+                        onChange={(e) => onFilterChange("rating", e.target.value)}
+                    >
+                        <option value="0">Any rating</option>
+                        <option value="4">4.0+</option>
+                        <option value="4.5">4.5+</option>
+                    </select>
+                </div>
+            </div>
+
+            <div className="sidebar-section">
+                <div className="sidebar-title">Cart ({cart.length})</div>
+                <div className="sidebar-sub">Books ready for checkout.</div>
+                {cart.length === 0 && <div style={{ fontSize: "0.78rem" }}>Your cart is empty.</div>}
+                {cart.map((item) => (
+                    <div className="cart-item" key={item.id}>
+                        <img src={item.image} className="cart-image" alt={item.title} />
+                        <div className="cart-details">
+                            <h4>{item.title}</h4>
+                            <div className="cart-price">${item.price.toFixed(2)}</div>
+                        </div>
+                        <button
+                            className="btn-secondary"
+                            style={{ padding: "0.2rem 0.4rem" }}
+                            onClick={() => onRemove(item.id)}
+                        >
+                            <i className="fas fa-times" />
+                        </button>
+                    </div>
+                ))}
+                {cart.length > 0 && (
+                    <>
+                        <div
+                            style={{
+                                marginTop: 8,
+                                paddingTop: 8,
+                                borderTop: "1px dashed rgba(148,163,184,0.7)",
+                                display: "flex",
+                                justifyContent: "space-between",
+                                fontSize: "0.8rem"
+                            }}
+                        >
+                            <span>Total</span>
+                            <strong>${total.toFixed(2)}</strong>
+                        </div>
+                        <button
+                            className="btn-primary"
+                            style={{ width: "100%", marginTop: 8, justifyContent: "center" }}
+                            onClick={onCheckoutClick}
+                        >
+                            <i className="fas fa-credit-card" />
+                            Checkout
+                        </button>
+                    </>
+                )}
+            </div>
+
+            <div className="profile-section">
+                <div className="profile-header">
+                    <div className="profile-avatar">
+                        {profile.name ? profile.name[0].toUpperCase() : "U"}
+                    </div>
+                    <div>
+                        <div style={{ fontSize: "0.85rem", fontWeight: 600 }}>
+                            {profile.name || "BookVerse Reader"}
+                        </div>
+                        <div className="profile-meta">
+                            Joined just now · {history.length} in history
+                        </div>
+                    </div>
+                </div>
+                <div className="sidebar-sub" style={{ marginBottom: 4 }}>
+                    Reading history
+                </div>
+                <div className="history-list">
+                    {history.length === 0 && (
+                        <div style={{ fontSize: "0.75rem", color: "var(--text-secondary)" }}>
+                            Start adding books to build your history.
+                        </div>
+                    )}
+                    {history.slice(0, 12).map((h, idx) => (
+                        <div className="history-item" key={idx}>
+                            {h.title} · <span style={{ color: "var(--text-secondary)" }}>{h.timestamp}</span>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </aside>
+    );
+};
+
+const MediaPlayer = ({ type, title, src }) => (
+  <div className="media-container">
+    <h3>{title}</h3>
+
+    {type === "video" ? (
+      <video controls width="100%" style={{ marginTop: "10px" }}>
+        <source src={src} type="video/mp4" />
+      </video>
+    ) : (
+      <audio controls style={{ width: "100%", marginTop: "10px" }}>
+        <source src={src} type="audio/mpeg" />
+      </audio>
+    )}
+  </div>
+);
+
+const AuthScreen = ({ onAuthSuccess }) => {
+    const [isSignup, setIsSignup] = useState(false);
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [error, setError] = useState("");
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        setError("");
+        if (!email || !password || (isSignup && !name)) {
+            setError("Please fill all required fields.");
+            return;
+        }
+        if (password.length < 6) {
+            setError("Password must be at least 6 characters.");
+            return;
+        }
+        const profile = {
+            name: isSignup ? name : email.split("@")[0],
+            email
+        };
+        localStorage.setItem("bookverseUser", JSON.stringify(profile));
+        onAuthSuccess(profile);
+    };
+
+    return (
+        <div className="auth-wrapper">
+            <div className="auth-card">
+                <div className="auth-visual">
+                    <div className="auth-logo">
+                        BOOKVERSE
+                        <span>ALPHA</span>
+                    </div>
+                    <h1 className="auth-title">Step into your reading universe.</h1>
+                    <p className="auth-subtitle">
+                        Curated books, immersive audio, and live reading stats – handcrafted for readers who love both code and classics.
+                    </p>
+                    <div className="auth-metrics">
+                        <div className="auth-metric">
+                            <strong>60+</strong> titles
+                        </div>
+                        <div className="auth-metric">
+                            <strong>24/7</strong> sync
+                        </div>
+                    </div>
+                    <div className="auth-review">
+                        <div className="auth-avatar">TS</div>
+                        <div>
+                            “BookVerse feels like a terminal for stories – minimal, fast, and deeply personal.”
+                            <div style={{ marginTop: 4, fontSize: "0.78rem", color: "#9ca3af" }}>
+                                — Early access reader
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className="auth-form">
+                    <div className="auth-form-header">
+                        <div>
+                            <div style={{ fontSize: "1rem", fontWeight: 600 }}>
+                                {isSignup ? "Create your BookVerse" : "Sign in to BookVerse"}
+                            </div>
+                            <div className="auth-toggle">
+                                {isSignup ? "Already have an account?" : "New to BookVerse?"}{" "}
+                                <button type="button" onClick={() => setIsSignup(!isSignup)}>
+                                    {isSignup ? "Sign in" : "Create one"}
+                                </button>
+                            </div>
+                        </div>
+                        <span className="auth-badge">
+                            <i className="fas fa-shield-alt" /> Zero backend · Local only
+                        </span>
+                    </div>
+                    <form onSubmit={handleSubmit}>
+                        {isSignup && (
+                            <div className="auth-field">
+                                <div className="auth-label">
+                                    <span>Name</span>
+                                </div>
+                                <input
+                                    className="auth-input"
+                                    placeholder="Your display name"
+                                    value={name}
+                                    onChange={(e) => setName(e.target.value)}
+                                />
+                            </div>
+                        )}
+                        <div className="auth-field">
+                            <div className="auth-label">
+                                <span>Email</span>
+                            </div>
+                            <input
+                                className="auth-input"
+                                type="email"
+                                placeholder="you@example.com"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                            />
+                        </div>
+                        <div className="auth-field">
+                            <div className="auth-label">
+                                <span>Password</span>
+                            </div>
+                            <input
+                                className="auth-input"
+                                type="password"
+                                placeholder="••••••••"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                            />
+                        </div>
+                        <div className="auth-field">
+                            <label className="auth-checkbox">
+                                <input type="checkbox" defaultChecked /> Keep me signed in on this device
+                            </label>
+                        </div>
+                        {error && (
+                            <div style={{ color: "#f97373", fontSize: "0.8rem", marginTop: 4 }}>{error}</div>
+                        )}
+                        <button type="submit" className="auth-submit">
+                            {isSignup ? "Create account" : "Sign in"}
+                            <i className="fas fa-arrow-right" />
+                        </button>
+                    </form>
+                    <div className="auth-separator">
+                        <span />
+                        or continue
+                        <span />
+                    </div>
+                    <div className="auth-socials">
+                        <button className="auth-social-btn" type="button">
+                            <i className="fab fa-google" />
+                            Google
+                        </button>
+                        <button className="auth-social-btn" type="button">
+                            <i className="fab fa-github" />
+                            GitHub
+                        </button>
+                    </div>
+                    <div className="auth-helper">
+                        All data is stored locally in your browser. Perfect for demos, prototypes, and offline reading sessions.
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+// Simple authors list for follow feature
+const authorList = [
+    "Matt Haig", "James Clear", "Frank Herbert", "Yuval Noah Harari",
+    "Morgan Housel", "George Orwell", "Harper Lee", "F. Scott Fitzgerald",
+    "Tara Westover", "Michelle Obama", "Paulo Coelho", "Daniel Kahneman",
+    "Cal Newport", "Andrew Hunt", "Robert C. Martin", "J.R.R. Tolkien",
+    "J.K. Rowling", "Mark Manson", "Robert Kiyosaki", "Haruki Murakami",
+    "Eric Ries", "Peter Thiel", "Nir Eyal", "Gayle Laakmann McDowell"
+];
+
+const App = () => {
+    const [books] = useState(allBooks);
+    const [filtered, setFiltered] = useState(allBooks);
+    const [search, setSearch] = useState("");
+    const [filters, setFilters] = useState({ genre: "", rating: "0" });
+    const [cart, setCart] = useState([]);
+    const [profile, setProfile] = useState({ name: "", email: "" });
+    const [history, setHistory] = useState([]);
+    const [activeTab, setActiveTab] = useState("home");
+    const [authenticated, setAuthenticated] = useState(false);
+    const [followedAuthors, setFollowedAuthors] = useState([]);
+    const [showCheckout, setShowCheckout] = useState(false);
+    const [selectedPayment, setSelectedPayment] = useState("card");
+
+    // Theme init
+    useEffect(() => {
+        const savedTheme = localStorage.getItem("theme") || "dark";
+        document.documentElement.setAttribute("data-theme", savedTheme);
+    }, []);
+
+    // Load user
+    useEffect(() => {
+        const saved = localStorage.getItem("bookverseUser");
+        if (saved) {
+            try {
+                const user = JSON.parse(saved);
+                setProfile(user);
+                setAuthenticated(true);
+            } catch {
+                // ignore
+            }
+        }
+    }, []);
+
+    // Load history
+    useEffect(() => {
+        const h = localStorage.getItem("bookverseHistory");
+        if (h) {
+            try {
+                setHistory(JSON.parse(h));
+            } catch {
+                // ignore
+            }
+        }
+    }, []);
+
+    // Load followed authors
+    useEffect(() => {
+        const f = localStorage.getItem("bookverseFollowedAuthors");
+        if (f) {
+            try {
+                setFollowedAuthors(JSON.parse(f));
+            } catch {
+                // ignore
+            }
+        }
+    }, []);
+
+    // Filtering (search + filters)
+    useEffect(() => {
+        let list = [...books];
+        if (search.trim()) {
+            const s = search.toLowerCase();
+            list = list.filter(
+                (b) =>
+                    b.title.toLowerCase().includes(s) ||
+                    b.author.toLowerCase().includes(s) ||
+                    b.genre.toLowerCase().includes(s)
+            );
+        }
+        if (filters.genre) {
+            list = list.filter((b) => b.genre === filters.genre);
+        }
+        if (parseFloat(filters.rating) > 0) {
+            list = list.filter((b) => b.rating >= parseFloat(filters.rating));
+        }
+        setFiltered(list);
+    }, [books, search, filters]);
+
+    const handleFilterChange = (key, value) => {
+        setFilters((prev) => ({ ...prev, [key]: value }));
+    };
+
+    const addToCart = useCallback(
+        (book) => {
+            setCart((prev) => {
+                if (prev.find((b) => b.id === book.id)) return prev;
+                return [...prev, book];
+            });
+            const stamp = new Date().toLocaleString("en-IN", {
+                hour12: false,
+                month: "short",
+                day: "2-digit",
+                hour: "2-digit",
+                minute: "2-digit"
+            });
+            setHistory((prev) => {
+                const next = [{ title: book.title, timestamp: stamp }, ...prev];
+                localStorage.setItem("bookverseHistory", JSON.stringify(next));
+                return next;
+            });
+        },
+        [setCart, setHistory]
+    );
+
+    const removeFromCart = (id) => {
+        setCart((prev) => prev.filter((b) => b.id !== id));
+    };
+
+    const openBook = (book) => {
+        alert(`Preview "${book.title}" by ${book.author} (rating ${book.rating.toFixed(1)})`);
+    };
+
+    const logout = () => {
+        localStorage.removeItem("bookverseUser");
+        setAuthenticated(false);
+        setProfile({ name: "", email: "" });
+    };
+
+    const toggleFollowAuthor = (name) => {
+        setFollowedAuthors((prev) => {
+            let next;
+            if (prev.includes(name)) {
+                next = prev.filter((n) => n !== name);
+            } else {
+                next = [...prev, name];
+            }
+            localStorage.setItem("bookverseFollowedAuthors", JSON.stringify(next));
+            return next;
+        });
+    };
+
+    const totalAmount = cart.reduce((sum, item) => sum + item.price, 0);
+
+    const handlePaymentConfirm = () => {
+        alert(`Payment of $${totalAmount.toFixed(2)} via ${selectedPayment.toUpperCase()} simulated successfully.`);
+        setShowCheckout(false);
+        setCart([]);
+    };
+
+    if (!authenticated) {
+        return <AuthScreen onAuthSuccess={(p) => setAuthenticated(true) || setProfile(p)} />;
+    }
+const authorsData = [
+  {
+    name: "James Clear",
+    image: "https://images.unsplash.com/photo-1607746882042-944635dfe10e",
+    rating: 4.8
+  },
+  {
+    name: "Colleen Hoover",
+    image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2",
+    rating: 4.6
+  },
+  {
+    name: "Haruki Murakami",
+    image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e",
+    rating: 4.7
+  },
+  {
+    name: "Frank Herbert",
+    image: "https://images.unsplash.com/photo-1527980965255-d3b416303d12",
+    rating: 4.5
+  }
+];
+    return (
+        <>
+            <header className="header">
+                <div className="container">
+                    <div className="header-content">
+                        <div className="logo-main">
+                            <span>BOOKVERSE</span>
+                            <span className="logo-pill">Reader OS</span>
+                        </div>
+                        <SearchBar search={search} setSearch={setSearch} />
+                        <div className="nav-right">
+                            <ThemeToggle />
+                            <button className="user-chip" onClick={() => setActiveTab("profile")}>
+                                <span className="user-avatar-sm">
+                                    {profile.name ? profile.name[0].toUpperCase() : "U"}
+                                </span>
+                                <span>{profile.name || "Profile"}</span>
+                            </button>
+                            <div className="cart-badge">{cart.length}</div>
+                            <button className="btn-secondary" onClick={logout}>
+                                <i className="fas fa-sign-out-alt" />
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <main className="container">
+                <div className="tabs">
+                    <button className={`tab-btn ${activeTab === "home" ? "active" : ""}`} onClick={() => setActiveTab("home")}>
+                        <i className="fas fa-house" /> Home
+                    </button>
+                    <button className={`tab-btn ${activeTab === "about" ? "active" : ""}`} onClick={() => setActiveTab("about")}>
+                        <i className="fas fa-info-circle" /> About
+                    </button>
+                    <button className={`tab-btn ${activeTab === "preferred" ? "active" : ""}`} onClick={() => setActiveTab("preferred")}>
+                        <i className="fas fa-bookmark" /> Preferred Books
+                    </button>
+                    <button className={`tab-btn ${activeTab === "favourites" ? "active" : ""}`} onClick={() => setActiveTab("favourites")}>
+                        <i className="fas fa-heart" /> Favourites
+                    </button>
+                    <button className={`tab-btn ${activeTab === "podcasts" ? "active" : ""}`} onClick={() => setActiveTab("podcasts")}>
+                        <i className="fas fa-podcast" /> Podcasts
+                    </button>
+                    <button className={`tab-btn ${activeTab === "shopping" ? "active" : ""}`} onClick={() => setActiveTab("shopping")}>
+                        <i className="fas fa-cart-shopping" /> Shopping
+                    </button>
+                    <button className={`tab-btn ${activeTab === "videobooks" ? "active" : ""}`} onClick={() => setActiveTab("videobooks")}>
+                        <i className="fas fa-video" /> VideoBooks
+                    </button>
+                    <button className={`tab-btn ${activeTab === "reviews" ? "active" : ""}`} onClick={() => setActiveTab("reviews")}>
+                        <i className="fas fa-star-half-alt" /> Reviews
+                    </button>
+                    <button className={`tab-btn ${activeTab === "authorpref" ? "active" : ""}`} onClick={() => setActiveTab("authorpref")}>
+                        <i className="fas fa-user-edit" /> Author Preferences
+                    </button>
+                    <button className={`tab-btn ${activeTab === "authorhistory" ? "active" : ""}`} onClick={() => setActiveTab("authorhistory")}>
+                        <i className="fas fa-history" /> Author History
+                    </button>
+                    <button className={`tab-btn ${activeTab === "contact" ? "active" : ""}`} onClick={() => setActiveTab("contact")}>
+                        <i className="fas fa-envelope" /> Contact
+                    </button>
+                    <button className={`tab-btn ${activeTab === "follow" ? "active" : ""}`} onClick={() => setActiveTab("follow")}>
+                        <i className="fas fa-user-plus" /> Follow Authors
+                    </button>
+                    <button className={`tab-btn ${activeTab === "timetable" ? "active" : ""}`} onClick={() => setActiveTab("timetable")}>
+                        <i className="fas fa-calendar-alt" /> Timetable
+                    </button>
+                    <button className={`tab-btn ${activeTab === "tracking" ? "active" : ""}`} onClick={() => setActiveTab("tracking")}>
+                        <i className="fas fa-list" /> Tracking
+                    </button>
+                </div>
+
+                {activeTab === "home" && (
+                    <>
+                        <section className="hero">
+                            <div className="hero-left">
+                                <h1>Welcome back, {profile.name || "reader"}.</h1>
+                                <p>
+                                    Pick up from your last universe or discover a new one. Every search, tap, and scroll updates your personal reading graph in real time.
+                                </p>
+                                <div className="hero-cards-row">
+                                    <div className="hero-mini-card">
+                                        <strong>Featured today</strong>
+                                        <br />
+                                        Atomic Habits · The Midnight Library · Dune
+                                    </div>
+                                    <div className="hero-mini-card">
+                                        <strong>Audio zone</strong>
+                                        <br />
+                                        Fresh podcasts & immersive audiobooks.
+                                    </div>
+                                    <div className="hero-mini-card">
+                                        <strong>Reading streak</strong>
+                                        <br />
+                                        {history.length} sessions tracked.
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="hero-cover-stack">
+                                <img
+                                    src="https://images.unsplash.com/photo-1455884981818-54cb785db6fc?auto=format&fit=crop&w=800&q=80"
+                                    alt="Stack"
+                                />
+                                <div className="hero-pill">
+                                    <i className="fas fa-bolt" />
+                                    Instant sync · Local first
+                                </div>
+                            </div>
+                        </section>
+
+                        <div className="main-grid">
+                            <section className="content-area">
+                                <div>
+                                    <h2 style={{ fontSize: "1.1rem", marginBottom: 8 }}>Books for you</h2>
+                                    <p style={{ fontSize: "0.88rem", color: "var(--text-secondary)" }}>
+                                        Showing {filtered.length} of {books.length} titles
+                                    </p>
+                                </div>
+                                <div className="book-grid">
+                                    {filtered.map((book) => (
+                                        <BookCard
+                                            key={book.id}
+                                            book={book}
+                                            onAddToCart={addToCart}
+                                            onOpen={openBook}
+                                        />
+                                    ))}
+                                </div>
+                            </section>
+                            <Sidebar
+                                filters={filters}
+                                onFilterChange={handleFilterChange}
+                                cart={cart}
+                                onRemove={removeFromCart}
+                                profile={profile}
+                                history={history}
+                                onCheckoutClick={() => setShowCheckout(true)}
+                            />
+                        </div>
+                    </>
+                )}
+
+                {activeTab === "about" && (
+                    <div className="main-grid">
+                        <section className="content-area">
+                            <div className="media-container">
+<div className="media-container about-queen">
+                                <h3>About BookVerse</h3>
+                                <p style={{ fontSize: "0.9rem", marginTop: 8 }}>
+                                     About BookVerse
+<p style={{ fontSize: "0.9rem", marginTop: 8 }}>
+          Welcome to BookVerse — where stories meet community.
+        </p>
+
+        <p style={{ fontSize: "0.9rem" }}>
+          BookVerse is a next-generation platform that blends the best of online marketplaces 
+          and social media, designed exclusively for book lovers.
+        </p>
+
+        <hr />
+
+        <h4>📚 What is BookVerse?</h4>
+        <p style={{ fontSize: "0.9rem" }}>
+          BookVerse is more than just a place to buy books — it’s a vibrant digital universe 
+          for readers, writers, and creators.
+        </p>
+
+        <hr />
+
+        <h4>🌟 What You Can Do</h4>
+
+        <ul style={{ fontSize: "0.9rem" }}>
+          <li><b>Discover Books:</b> Explore trending titles and personalized recommendations.</li>
+          <li><b>Shop Seamlessly:</b> Buy books from trusted sellers and creators.</li>
+          <li><b>Share Your Story:</b> Post reviews, photos, and reading updates.</li>
+          <li><b>Connect with Readers:</b> Follow users and join discussions.</li>
+          <li><b>Support Creators:</b> Help authors and bookstores grow.</li>
+        </ul>
+
+        <hr />
+
+        <h4>💡 Our Vision</h4>
+        <p style={{ fontSize: "0.9rem" }}>
+          We believe books are more than just pages — they’re experiences meant to be shared.
+        </p>
+
+        <hr />
+
+        <h4>🚀 Why BookVerse?</h4>
+        <p style={{ fontSize: "0.9rem" }}>
+          Because reading shouldn’t be a solo journey. BookVerse transforms reading into a 
+          social, interactive experience.
+        </p>
+
+                                </p>
+</div>
+                            </div>
+                        </section>
+                        <Sidebar
+                            filters={filters}
+                            onFilterChange={handleFilterChange}
+                            cart={cart}
+                            onRemove={removeFromCart}
+                            profile={profile}
+                            history={history}
+                            onCheckoutClick={() => setShowCheckout(true)}
+                        />
+                    </div>
+                )}
+
+                {activeTab === "preferred" && (
+                    <div className="main-grid">
+                        <section className="content-area">
+                            <div className="media-container">
+                                <h3>Preferred Books</h3>
+                                <p style={{ fontSize: "0.9rem", marginBottom: 10 }}>
+                                    A quick slice of highly-rated titles (4.5★ and above).
+                                </p>
+                                <div className="book-grid">
+                                    {books.filter((b) => b.rating >= 4.5).map((book) => (
+                                        <BookCard
+                                            key={book.id}
+                                            book={book}
+                                            onAddToCart={addToCart}
+                                            onOpen={openBook}
+                                        />
+                                    ))}
+                                </div>
+                            </div>
+                        </section>
+                        <Sidebar
+                            filters={filters}
+                            onFilterChange={handleFilterChange}
+                            cart={cart}
+                            onRemove={removeFromCart}
+                            profile={profile}
+                            history={history}
+                            onCheckoutClick={() => setShowCheckout(true)}
+                        />
+                    </div>
+                )}
+
+                {activeTab === "favourites" && (
+                    <div className="main-grid">
+                        <section className="content-area">
+                            <div className="media-container">
+                                <h3>Favourites</h3>
+                                <p style={{ fontSize: "0.9rem", marginBottom: 10 }}>
+                                    A mock favourites shelf – you can later wire this to a real favourites list.
+                                </p>
+                                <div className="book-grid">
+                                    {books.slice(0, 8).map((book) => (
+                                        <BookCard
+                                            key={book.id}
+                                            book={book}
+                                            onAddToCart={addToCart}
+                                            onOpen={openBook}
+                                        />
+                                    ))}
+                                </div>
+                            </div>
+                        </section>
+                        <Sidebar
+                            filters={filters}
+                            onFilterChange={handleFilterChange}
+                            cart={cart}
+                            onRemove={removeFromCart}
+                            profile={profile}
+                            history={history}
+                            onCheckoutClick={() => setShowCheckout(true)}
+                        />
+                    </div>
+                )}
+
+                {activeTab === "podcasts" && (
+                    <div className="main-grid">
+                        <section className="content-area">
+                            <MediaPlayer
+                                type="audio"
+                                title="BookVerse Podcast · Deep Work & Focus"
+                                src="C:\Users\Thipthi Shree V\Downloads\deep.mpeg"
+                            />
+                            <MediaPlayer
+                                type="audio"
+                                title="Author Spotlight · Haruki Murakami"
+                                src="C:\Users\Thipthi Shree V\Downloads\mura.mpeg"
+                            />
+                        </section>
+                        <Sidebar
+                            filters={filters}
+                            onFilterChange={handleFilterChange}
+                            cart={cart}
+                            onRemove={removeFromCart}
+                            profile={profile}
+                            history={history}
+                            onCheckoutClick={() => setShowCheckout(true)}
+                        />
+                    </div>
+                )}
+
+              {activeTab === "shopping" && (
+  <div className="main-grid">
+    <section className="content-area">
+      
+      <div className="media-container">
+        <h3>Shopping Zone</h3>
+        <p style={{ fontSize: "0.9rem" }}>
+          Add books to cart, watch the Grab Now bar fill up, and then checkout.
+        </p>
+
+        {/* Existing Progress Bar */}
+        <div className="grab-bar">
+          <div className="grab-bar-fill"></div>
+        </div>
+
+        {/* Existing Pill */}
+        <div className="grab-now-pill">
+          <i className="fas fa-fire" />
+          Grab now – limited time deals
+        </div>
+      </div>
+
+      {/* Books Grid */}
+      <div className="book-grid">
+        {books.slice(0, 16).map((book) => (
+          <BookCard
+            key={book.id}
+            book={book}
+            onAddToCart={addToCart}
+            onOpen={openBook}
+          />
+        ))}
+      </div>
+    </section>
+
+    {/* Sidebar */}
+    <Sidebar
+      filters={filters}
+      onFilterChange={handleFilterChange}
+      cart={cart}
+      onRemove={removeFromCart}
+      profile={profile}
+      history={history}
+      onCheckoutClick={() => setShowCheckout(true)}
+    />
+
+    {/* 🔥 NEW MOVING GRAB BOX */}
+    <div className="grab-wrapper">
+      <div
+        className="grab-box"
+        onClick={() => alert("🔥 Limited deals!")}
+      >
+        🔥 Grab Now – Limited Time Deals
+      </div>
+    </div>
+  </div>
+)}
+
+               {activeTab === "videobooks" && (
+                    <div className="main-grid">
+                        <section className="content-area">
+                            <MediaPlayer
+                                type="video"
+                                title="The BigBuckBunny"
+                                src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+                            />
+                            <MediaPlayer
+                                type="video"
+                                title="Elephants Dream"
+                                src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4"
+                            />
+                        </section>
+                        <Sidebar
+                            filters={filters}
+                            onFilterChange={handleFilterChange}
+                            cart={cart}
+                            onRemove={removeFromCart}
+                            profile={profile}
+                            history={history}
+                            onCheckoutClick={() => setShowCheckout(true)}
+                        />
+                    </div>
+                )}
+
+                {activeTab === "reviews" && (
+                    <div className="main-grid">
+                        <section className="content-area">
+                            <div className="review-wow">
+
+  <h2>✨ Tell Us Your BookVerse Vibe</h2>
+
+  <div className="review-question">
+    <label>📖 Which book stole your sleep recently?</label>
+    <input type="text" placeholder="Type the book name..." />
+  </div>
+
+  <div className="review-question">
+    <label>🔥 How intense was your reading experience?</label>
+    <select>
+      <option>Mild ☁️</option>
+      <option>Hooked 📚</option>
+      <option>Obsessed 🔥</option>
+      <option>Life-changing 🌟</option>
+    </select>
+  </div>
+
+  <div className="review-question">
+    <label>🎭 Which vibe matches your last read?</label>
+    <div className="emoji-options">
+      <span>😂</span>
+      <span>😭</span>
+      <span>😱</span>
+      <span>❤️</span>
+      <span>🤯</span>
+    </div>
+  </div>
+
+  <div className="review-question">
+    <label>💬 Drop your raw thoughts</label>
+    <textarea placeholder="Say anything... no filters 👀"></textarea>
+  </div>
+
+  <div className="review-question">
+    <label>🎯 Would you recommend it?</label>
+    <div className="toggle-buttons">
+      <button>Yes 💯</button>
+      <button>Maybe 🤔</button>
+      <button>No 😶</button>
+    </div>
+  </div>
+
+  <button className="submit-review">🚀 Submit Review</button>
+
+</div>
+                        </section>
+                        <Sidebar
+                            filters={filters}
+                            onFilterChange={handleFilterChange}
+                            cart={cart}
+                            onRemove={removeFromCart}
+                            profile={profile}
+                            history={history}
+                            onCheckoutClick={() => setShowCheckout(true)}
+                        />
+                    </div>
+                )}
+
+                {activeTab === "authorpref" && (
+  <div className="main-grid">
+    <section className="content-area">
+      <div className="media-container">
+        <h3>Author Preferences</h3>
+        <p style={{ fontSize: "0.9rem", marginBottom: 10 }}>
+          Highlight authors you want BookVerse to surface more often.
+        </p>
+
+        <div className="author-grid">
+          {authorsData.map((author, i) => (
+            <div key={i} className="author-card">
+
+              <img src={author.image} alt={author.name} />
+
+              <h4>{author.name}</h4>
+
+              <div className="stars">
+                {"⭐".repeat(Math.floor(author.rating))}
+                <span className="rating-text">{author.rating}</span>
+              </div>
+
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <Sidebar
+      filters={filters}
+      onFilterChange={handleFilterChange}
+      cart={cart}
+      onRemove={removeFromCart}
+      profile={profile}
+      history={history}
+      onCheckoutClick={() => setShowCheckout(true)}
+    />
+  </div>
+)}                       
+
+                {activeTab === "authorhistory" && (
+                    <div className="main-grid">
+                        <section className="content-area">
+                            <div className="media-container">
+                                <h3>Author History</h3>
+                                <p style={{ fontSize: "0.9rem", marginBottom: 10 }}>
+                                    Quick view of authors you've interacted with via your reading history.
+                                </p>
+                                <ul style={{ fontSize: "0.86rem", marginLeft: "1rem" }}>
+                                    {Array.from(new Set(history.map(h => {
+                                        const book = books.find(b => b.title === h.title);
+                                        return book ? book.author : null;
+                                    }).filter(Boolean))).map((author) => (
+                                        <li key={author}>{author}</li>
+                                    ))}
+                                </ul>
+                            </div>
+                        </section>
+                        <Sidebar
+                            filters={filters}
+                            onFilterChange={handleFilterChange}
+                            cart={cart}
+                            onRemove={removeFromCart}
+                            profile={profile}
+                            history={history}
+                            onCheckoutClick={() => setShowCheckout(true)}
+                        />
+                    </div>
+                )}
+
+                {activeTab === "contact" && (
+                    <div className="main-grid">
+                        <section className="content-area">
+                            <div className="media-container">
+                                <h3>Contact</h3>
+                                <p style={{ fontSize: "0.9rem", marginBottom: 10 }}>
+                                    Drop feedback or feature requests for the next version of BookVerse.
+                                </p>
+                                <div className="auth-field">
+                                    <div className="auth-label">
+                                        <span>Subject</span>
+                                    </div>
+                                    <input className="auth-input" placeholder="Subject" />
+                                </div>
+                                <div className="auth-field">
+                                    <div className="auth-label">
+                                        <span>Message</span>
+                                    </div>
+                                    <textarea
+                                        className="auth-input"
+                                        rows="4"
+                                        style={{ resize: "vertical" }}
+                                        placeholder="Your message..."
+                                    />
+                                </div>
+                                <button className="btn-primary" style={{ marginTop: 8 }}>
+                                    <i className="fas fa-paper-plane" /> Send
+                                </button>
+                            </div>
+                        </section>
+                        <Sidebar
+                            filters={filters}
+                            onFilterChange={handleFilterChange}
+                            cart={cart}
+                            onRemove={removeFromCart}
+                            profile={profile}
+                            history={history}
+                            onCheckoutClick={() => setShowCheckout(true)}
+                        />
+                    </div>
+                )}
+
+                {activeTab === "follow" && (
+                    <div className="main-grid">
+                        <section className="content-area">
+                            <div className="media-container">
+                                <h3>Follow Authors</h3>
+                                <p style={{ fontSize: "0.9rem", marginBottom: 10 }}>
+                                    Follow authors just like you do on Instagram; BookVerse can prioritize their books for you.
+                                </p>
+                                {authorList.map((name) => {
+                                    const following = followedAuthors.includes(name);
+                                    return (
+                                        <div key={name} className="author-card">
+                                            <span>{name}</span>
+                                            <button
+                                                className={`follow-btn ${following ? "following" : ""}`}
+                                                onClick={() => toggleFollowAuthor(name)}
+                                            >
+                                                {following ? (
+                                                    <>
+                                                        <i className="fas fa-check" /> Following
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <i className="fas fa-plus" /> Follow
+                                                    </>
+                                                )}
+                                            </button>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </section>
+                        <Sidebar
+                            filters={filters}
+                            onFilterChange={handleFilterChange}
+                            cart={cart}
+                            onRemove={removeFromCart}
+                            profile={profile}
+                            history={history}
+                            onCheckoutClick={() => setShowCheckout(true)}
+                        />
+                    </div>
+                )}
+
+                {activeTab === "timetable" && (
+                    <div className="main-grid">
+                        <section className="content-area">
+                            <div className="media-container">
+                                <h3>Reading Timetable</h3>
+                                <p style={{ fontSize: "0.9rem", marginBottom: 10 }}>
+                                    Plan a simple weekly reading routine.
+                                </p>
+                                <div className="timetable-grid">
+                                    {["Mon","Tue","Wed","Thu","Fri","Sat","Sun"].map((day) => (
+                                        <div key={day} className="timetable-cell">
+                                            <div className="timetable-day">{day}</div>
+                                            <div style={{ fontSize: "0.75rem", color: "var(--text-secondary)" }}>
+                                                8–9 PM · Deep Work
+                                                <br />
+                                                9–9:30 PM · Fiction
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </section>
+                        <Sidebar
+                            filters={filters}
+                            onFilterChange={handleFilterChange}
+                            cart={cart}
+                            onRemove={removeFromCart}
+                            profile={profile}
+                            history={history}
+                            onCheckoutClick={() => setShowCheckout(true)}
+                        />
+                    </div>
+                )}
+
+                {activeTab === "tracking" && (
+                    <div className="main-grid">
+                        <section className="content-area">
+                            <div className="media-container">
+                                <h3>Tracking · Books you've read</h3>
+                                <p style={{ fontSize: "0.9rem", marginBottom: 10 }}>
+                                    This is your combined reading history (whenever you added a book to cart).
+                                </p>
+                                <div className="history-list">
+                                    {history.length === 0 && (
+                                        <div style={{ fontSize: "0.78rem", color: "var(--text-secondary)" }}>
+                                            No books in history yet.
+                                        </div>
+                                    )}
+                                    {history.map((h, i) => (
+                                        <div className="history-item" key={i}>
+                                            {h.title} ·{" "}
+                                            <span style={{ color: "var(--text-secondary)" }}>{h.timestamp}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </section>
+                        <Sidebar
+                            filters={filters}
+                            onFilterChange={handleFilterChange}
+                            cart={cart}
+                            onRemove={removeFromCart}
+                            profile={profile}
+                            history={history}
+                            onCheckoutClick={() => setShowCheckout(true)}
+                        />
+                    </div>
+                )}
+            </main>
+
+            <footer>
+                &copy; 2026 BookVerse · Built for readers who love both pixels and pages.
+            </footer>
+
+            {showCheckout && (
+                <div className="modal-backdrop">
+                    <div className="modal">
+                        <div className="modal-header">
+                            <div className="modal-title">Checkout</div>
+                            <button className="modal-close" onClick={() => setShowCheckout(false)}>
+                                <i className="fas fa-times" />
+                            </button>
+                        </div>
+                        <div style={{ fontSize: "0.9rem", marginBottom: 8 }}>
+                            Total amount: <strong>${totalAmount.toFixed(2)}</strong>
+                        </div>
+                        <div style={{ fontSize: "0.8rem", color: "var(--text-secondary)" }}>
+                            Choose a payment method:
+                        </div>
+                        <div
+                            className={`payment-option ${selectedPayment === "card" ? "selected" : ""}`}
+                            onClick={() => setSelectedPayment("card")}
+                        >
+                            <i className="fas fa-credit-card" />
+                            <span>Credit / Debit Card</span>
+                        </div>
+                        <div
+                            className={`payment-option ${selectedPayment === "upi" ? "selected" : ""}`}
+                            onClick={() => setSelectedPayment("upi")}
+                        >
+                            <i className="fas fa-university" />
+                            <span>UPI (GPay / PhonePe / Paytm)</span>
+                        </div>
+                        <div
+                            className={`payment-option ${selectedPayment === "wallet" ? "selected" : ""}`}
+                            onClick={() => setSelectedPayment("wallet")}
+                        >
+                            <i className="fas fa-wallet" />
+                            <span>Wallets</span>
+                        </div>
+                        <div
+                            className={`payment-option ${selectedPayment === "cod" ? "selected" : ""}`}
+                            onClick={() => setSelectedPayment("cod")}
+                        >
+                            <i className="fas fa-money-bill-wave" />
+                            <span>Cash on Delivery</span>
+                        </div>
+                        <button className="modal-footer-btn" onClick={handlePaymentConfirm}>
+                            Confirm Payment
+                        </button>
+                    </div>
+                </div>
+            )}
+        </>
+    );
+};
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<App />);
+</script>
+</body>
+</html>
